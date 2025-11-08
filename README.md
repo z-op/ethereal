@@ -19,7 +19,7 @@ TODO:
 
 #### Lucky Blocks
 
-It provides 65 new lucky blocks if the mod is detected.
+It provides 68 new lucky blocks if the mod is detected.
 
 ## Technical info
 -----------------
@@ -86,6 +86,7 @@ Also those more as optional:
 | ethereal.sakura                | Sakura biome, 1=on / 0=off        | int  | 1 |
 | ethereal.tundra                | Tundra biome, 1=on / 0=off        | int  | 1 |
 | ethereal.mediterranean         | Mediterranean biome, 1=on / 0=off | int  | 1 |
+| ethereal.mangrove              | Mangrove biome, 1=on / 0=off      | int  | 1 |
 | ethereal.flightpotion_duration | Flight Potion Duration seconds    | int  | 300 |
 
 #### Fishing api
@@ -97,6 +98,11 @@ several examples are at the documentation of [api.txt](api.txt) file.
 
 A huge thanks to Chinchow who was the inspiration behind Ethereal and everyone
 who helped make this mod bigger and better throughout it's release :)
+
+### 1.33
+ - Added Mangrove biome (based on mineclonia)
+ - Added Mangrove wooden doors, fences, stairs
+ - Added new lucky blocks
 
 ### 1.32
  - Add {eatable} groups to food items
@@ -110,6 +116,9 @@ who helped make this mod bigger and better throughout it's release :)
    the new layout for compatibility if wanted.
  - Update settings.
  - Candles use [multiply for colour.
+ - Add desert stone spikes to caves biome, and stone spikes underneath.
+ - Add pond schematic for generation in flat mesa areas, add new pond lucky blocks.
+ - Add all-faces variants of tree trunks.
 
 ### 1.31
  - Fix fishing biome checks

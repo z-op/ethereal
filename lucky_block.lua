@@ -1,7 +1,7 @@
 
 -- ethereal schematic path
 
-local epath = minetest.get_modpath("ethereal") .. "/schematics/"
+local epath = core.get_modpath("ethereal") .. "/schematics/"
 
 -- add schematics
 
@@ -14,6 +14,9 @@ lucky_block:add_schematics({
 	{"basandrabush", ethereal.basandrabush, {x = 1, y = 0, z = 1}},
 	{"mushroomone", ethereal.mushroomone, {x = 4, y = 0, z = 4}},
 	{"mushroomtwo", ethereal.mushroomtwo, {x = 1, y = 0, z = 1}},
+	{"underspike", ethereal.desertstone_under_spike, {x = 1, y = 0, z = 1}},
+	{"ethereal_pond", ethereal.pond, {x = 6, y = 1, z = 7}},
+	{"mangrovetree", ethereal.mangrove_tree, {x = 5, y = 0, z = 5}},
 })
 
 -- add lucky blocks
@@ -62,6 +65,23 @@ lucky_block:add_blocks({
 	{"dro", {"ethereal:shovel_crystal"}},
 	{"dro", {"ethereal:fishing_rod_baited"}},
 	{"exp"},
+	{"sch", "underspike", 0, false},
+	{"sch", "underspike", 0, false, {
+		{"default:cobble", "default:desert_cobble"},
+		{"default:stone", "default:desert_stone"}
+	}},
+	{"sch", "underspike", 0, false, {
+		{"default:cobble", "default:sandstone"},
+		{"default:stone", "default:sandstonebrick"}
+	}},
+	{"sch", "underspike", 0, false, {
+		{"default:cobble", "default:desert_sandstone"},
+		{"default:stone", "default:desert_sandstone_brick"}
+	}},
+	{"sch", "underspike", 0, false, {
+		{"default:cobble", "default:silver_sandstone"},
+		{"default:stone", "default:silver_sandstone_brick"}
+	}},
 	{"dro", {"ethereal:fire_dust"}, 2},
 	{"exp", 4},
 	{"dro", {"ethereal:crystal_gilly_staff"}},
@@ -79,10 +99,13 @@ lucky_block:add_blocks({
 		{name = "ethereal:sakura_sapling", max = 10},
 		{name = "ethereal:willow_sapling", max = 10},
 		{name = "ethereal:lemon_tree_sapling", max = 10},
-		{name = "ethereal:olive_tree_sapling", max = 10}
+		{name = "ethereal:olive_tree_sapling", max = 10},
+		{name = "ethereal:mangrove_sapling", max = 10}
 	}},
 	{"flo", 5, {"ethereal:blue_marble_tile"}, 2},
-	{"dro", {"ethereal:blue_marble", "ethereal:blue_marble_tile"}, 8},
+	{"flo", 5, {"ethereal:blue_marble_brick"}, 2},
+	{"dro", {"ethereal:blue_marble", "ethereal:blue_marble_tile",
+			"ethereal:blue_marble_brick"}, 8},
 	{"dro", {"ethereal:etherium_ore"}, 5},
 	{"nod", "default:chest", 0, {
 		{name = "ethereal:fish_bluefin", max = 4},
@@ -131,6 +154,7 @@ lucky_block:add_blocks({
 		"ethereal:crystal_moss", "ethereal:mushroom_moss"}, 1},
 	{"tro", "ethereal:candle_red", "tnt_blast", true},
 	{"nod", "ethereal:candle_orange", 0},
+	{"dro", {"ethereal:candle_"}, 4, true},
 	{"nod", "ethereal:candle", 0},
 	{"dro", {"ethereal:fish_tetra", "ethereal:fish_shrimp", "ethereal:worm"}, 1},
 	{"nod", "default:chest", 0, {
@@ -147,10 +171,53 @@ lucky_block:add_blocks({
 		{name = "ethereal:sushi_nigiri", max = 1},
 		{name = "ethereal:sushi_kappamaki", max = 1},
 		{name = "ethereal:hearty_stew", max = 1},
+	}},
+	{"sch", "ethereal_pond", 0, false},
+	{"sch", "mangrovetree", 0, false},
+	{"sch", "ethereal_pond", 0, false, {
+		{"default:river_water_source", "default:lava_source"},
+		{"default:clay", "default:stone"},
+		{"default:dirt", "ethereal:fiery_dirt"},
+		{"default:mossycobble", "default:obsidian"},
+		{"ethereal:bush2", "ethereal:basandra_bush_leaves"},
+		{"default:fern_1", "ethereal:dry_shrub"},
+		{"default:fern_2", "ethereal:dry_shrub"},
+		{"default:fern_3", "ethereal:fire_flower"},
+		{"default:grass_4", "ethereal:dry_shrub"}
+	}},
+	{"sch", "ethereal_pond", 0, false, {
+		{"default:clay", "default:dirt"},
+		{"default:dirt", "default:dry_dirt_with_dry_grass"},
+		{"default:mossycobble", "default:dry_dirt"},
+		{"ethereal:bush2", "default:acacia_bush_leaves"},
+		{"default:fern_1", "default:dry_grass_1"},
+		{"default:fern_2", "default:dry_grass_2"},
+		{"default:fern_3", "default:dry_grass_3"},
+		{"default:grass_4", "default:dry_grass_4"}
+	}},
+	{"sch", "ethereal_pond", 0, false, {
+		{"default:river_water_source", "default:water_source"},
+		{"default:dirt", "default:sand"},
+		{"default:mossycobble", "default:dirt"},
+		{"ethereal:bush2", "default:pine_bush_needles"},
+		{"default:fern_1", "default:marram_grass_1"},
+		{"default:fern_2", "default:marram_grass_2"},
+		{"default:fern_3", "default:marram_grass_3"},
+		{"default:grass_4", "default:dry_shrub"}
+	}},
+	{"sch", "ethereal_pond", 0, false, {
+		{"default:river_water_source", "default:water_source"},
+		{"default:dirt", "default:coral_brown"},
+		{"default:mossycobble", "default:coral_orange"},
+		{"ethereal:bush2", "default:coral_skeleton"},
+		{"default:fern_1", "ethereal:coral2"},
+		{"default:fern_2", "ethereal:coral3"},
+		{"default:fern_3", "ethereal:coral4"},
+		{"default:grass_4", "ethereal:seaweed"}
 	}}
 })
 
-if minetest.get_modpath("3d_armor") then
+if core.get_modpath("3d_armor") then
 
 	lucky_block:add_blocks({
 		{"dro", {"3d_armor:helmet_crystal"}},
@@ -161,10 +228,52 @@ if minetest.get_modpath("3d_armor") then
 	})
 end
 
-if minetest.get_modpath("shields") then
+if core.get_modpath("shields") then
 
 	lucky_block:add_blocks({
 		{"dro", {"shields:shield_crystal"}},
 		{"exp"}
 	})
 end
+
+-- paper house
+
+local air = {name = "air"}
+local pp2 = {name = "ethereal:paper_wall", param1 = 255, param2 = 2}
+local pp3 = {name = "ethereal:paper_wall", param1 = 255, param2 = 3}
+local pp0 = {name = "ethereal:paper_wall", param1 = 255, param2 = 0}
+local pp1 = {name = "ethereal:paper_wall", param1 = 255, param2 = 1}
+local bam = {name = "ethereal:bamboo_floor", param1 = 255, param2 = 1}
+local dor = minetest.get_modpath("doors") and
+		{name = "ethereal:door_sakura_a", param1 = 255, param2 = 0} or pp2
+
+local paper_house = {
+	size = {x = 5, y = 3, z = 5},
+	data = {
+		air, pp0, pp0, pp0, air,
+		air, pp0, pp0, pp0, air,
+		air, air, air, air, air,
+
+		pp1, bam, bam, bam, pp3,
+		pp1, air, air, air, pp3,
+		air, bam, bam, bam, air,
+
+		pp1, bam, bam, bam, pp3,
+		pp1, air, air, air, pp3,
+		air, bam, bam, bam, air,
+
+		pp1, bam, bam, bam, pp3,
+		pp1, air, air, air, pp3,
+		air, bam, bam, bam, air,
+
+		air, pp2, dor, pp2, air,
+		air, pp2, air, pp2, air,
+		air, air, air, air, air
+	}
+}
+
+lucky_block:add_schematics({
+	{"paper_house", paper_house, {x = 2, y = 0, z = 2}}
+})
+
+lucky_block:add_blocks({ {"sch", "paper_house", 1, false} })

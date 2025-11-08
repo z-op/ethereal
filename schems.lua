@@ -1,8 +1,8 @@
 
 -- path to default and ethereal schematics
 
-local path = minetest.get_modpath("ethereal") .. "/schematics/"
-local dpath = minetest.get_modpath("default") .. "/schematics/"
+local path = core.get_modpath("ethereal") .. "/schematics/"
+local dpath = core.get_modpath("default") .. "/schematics/"
 
 -- load schematic tables
 
@@ -31,6 +31,9 @@ dofile(path .. "lemon_tree.lua")
 dofile(path .. "olive_tree.lua")
 dofile(path .. "basandra_bush.lua")
 dofile(path .. "desertstone_spike.lua")
+dofile(path .. "desertstone_under_spike.lua")
+dofile(path .. "mangrove_tree.lua")
+dofile(path .. "pond.lua")
 
 -- register decoration helper
 
@@ -44,22 +47,60 @@ local function register_decoration(enabled, def)
 	def.y_max = def.y_max or 100
 	def.flags = def.flags or "place_center_x, place_center_z"
 
-	minetest.register_decoration(def)
+	core.register_decoration(def)
 end
 
 -- old biome setting (when enabled old heat/humidity values are used)
 
-local old = minetest.settings:get_bool("ethereal.old_biomes")
+local old = core.settings:get_bool("ethereal.old_biomes")
+
+-- mangrove tree and waterlily
+
+register_decoration(ethereal.mangrove, {
+	place_on = {"ethereal:mud"},
+	sidelen = 80, fill_ratio = 0.023, y_min = -1, y_max = 6,
+	biomes = {"mangrove", "mangrove_shore"},
+	schematic = ethereal.mangrove_tree_2,
+	flags = "place_center_x, place_center_z, force_placement", rotation = "random"})
+
+register_decoration(ethereal.mangrove, {
+	place_on = {"ethereal:mud"},
+	sidelen = 80, fill_ratio = 0.023, y_min = 1, y_max = 6,
+	biomes = {"mangrove", "mangrove_shore"},
+	schematic = ethereal.mangrove_tree,
+	flags = "place_center_x, place_center_z, force_placement", rotation = "random"})
+
+register_decoration(ethereal.mangrove, {
+	place_on = {"ethereal:mud"},
+	sidelen = 16, fill_ratio = 0.035, y_min = 0, y_max = 0,
+	biomes = {"mangrove_shore"},
+	schematic = {
+		size = {x = 1, y = 3, z = 1},
+		data = {
+			{name = "ethereal:mud", param1 = 255},
+			{name = "default:water_source", param1 = 255},
+			{name = "flowers:waterlily", param1 = 255},
+		}
+	}, rotation = "random"})
 
 -- desertstone spike
 
-register_decoration(minetest.get_modpath("stairs") and ethereal.caves, {
+register_decoration(core.get_modpath("stairs") and ethereal.caves, {
 	place_on = "default:desert_stone",
-	fill_ratio = 0.01, y_min = 5, y_max = 42,
+	sidelen = 16, fill_ratio = 0.01, y_min = 5, y_max = 42,
 	biomes = {"caves"},
 	schematic = ethereal.desertstone_spike,
 	spawn_by = "default:desert_stone", num_spawn_by = 8,
 	flags = "place_center_x, place_center_z, force_placement", rotation = "random"})
+
+-- desertstone under spike
+
+register_decoration(ethereal.caves, {
+	place_on = "default:stone",
+	sidelen = 16, fill_ratio = 0.01, y_min = 5, y_max = 42,
+	biomes = {"caves"},
+	schematic = ethereal.desertstone_under_spike,
+	flags = "place_center_x, place_center_z, all_floors", rotation = "random"})
 
 -- igloo
 
@@ -274,7 +315,7 @@ register_decoration(ethereal.savanna, {
 register_decoration(1, {
 	place_on = "default:sand",
 	fill_ratio = 0.0025, y_min = 1, y_max = 1,
-	biomes = {"desert_ocean", "plains_ocean", "sandstone_ocean",
+	biomes = {"desert_ocean", "plains_ocean", "sandstone_desert_ocean",
 			"mesa_ocean", "grove_ocean", "deciduous_forest_ocean"},
 	schematic = ethereal.palmtree})
 
@@ -356,19 +397,19 @@ register_decoration(1, {
 
 -- default pine bush
 
-register_decoration((minetest.registered_nodes["default:pine_bush"] and 1), {
+register_decoration((core.registered_nodes["default:pine_bush"] and 1), {
 	name = "default:pine_bush",
 	place_on = {"default:dirt_with_snow", "default:cold_dirt"},
 	sidelen = 16, y_min = 4, y_max = 120,
 	noise_params = {
 		offset = -0.004, scale = 0.01, spread = {x = 100, y = 100, z = 100},
 		seed = 137, octaves = 3, persist = 0.7},
-	biomes = {"taiga", "snowy_grassland"},
+	biomes = {"taiga", old and "taiga" or "snowy_grassland"},
 	schematic = dpath .. "pine_bush.mts"})
 
 -- default blueberry bush
 
-register_decoration((minetest.registered_nodes["default:blueberry_bush_leaves"] and 1), {
+register_decoration((core.registered_nodes["default:blueberry_bush_leaves"] and 1), {
 	name = "default:blueberry_bush",
 	place_on = {"default:dirt_with_coniferous_litter", "default:dirt_with_snow",
 			"ethereal:cold_dirt"},
@@ -376,7 +417,7 @@ register_decoration((minetest.registered_nodes["default:blueberry_bush_leaves"] 
 	noise_params = {
 		offset = -0.004, scale = 0.01, spread = {x = 100, y = 100, z = 100},
 		seed = 697, octaves = 3, persist = 0.7},
-	biomes = {"coniferous_forest", "taiga", "snowy_grassland"},
+	biomes = {"coniferous_forest", "taiga", old and "taiga" or "snowy_grassland"},
 	schematic = dpath .. "blueberry_bush.mts", place_offset_y = 1})
 
 -- place waterlily in beach areas
@@ -397,9 +438,9 @@ register_decoration(1, {
 if ethereal.reefs == 1 then
 
 	-- override corals so crystal shovel can pick them up intact
-	minetest.override_item("default:coral_skeleton", {groups = {crumbly = 3}})
-	minetest.override_item("default:coral_orange", {groups = {crumbly = 3}})
-	minetest.override_item("default:coral_brown", {groups = {crumbly = 3}})
+	core.override_item("default:coral_skeleton", {groups = {crumbly = 3}})
+	core.override_item("default:coral_orange", {groups = {crumbly = 3}})
+	core.override_item("default:coral_brown", {groups = {crumbly = 3}})
 
 	register_decoration(1, {
 		place_on = {"default:sand"},
@@ -494,4 +535,34 @@ if ethereal.logs == 1 then
 		flags = "place_center_x",
 		rotation = "random",
 		spawn_by = "ethereal:grove_dirt", num_spawn_by = 8})
+end
+
+-- deep see fumerole / vent
+
+register_decoration(core.get_modpath("nether") and 1, {
+	name = "nether:fumarole",
+	place_on = {"default:sand"},
+	sidelen = 16, y_min = -192, y_max = -45,
+	fill_ratio = 0.0001,
+	schematic = {
+		size = {x = 1, y = 2, z = 2},
+		data = {
+			{name = "default:lava_source", param1 = 255, force_place = true},
+			{name = "nether:fumarole", param1 = 255, force_place = true},
+			{name = "default:sand", param1 = 192, force_place = true},
+			{name = "ethereal:sandy", param1 = 192, force_place = true},
+		}
+	},
+	place_offset_y = -1,
+	spawn_by = {"default:water_source"}, num_spawn_by = 8})
+
+if core.get_modpath("nether") then
+
+	core.register_lbm({
+		name = ":nether:extra_fumarole_timer",
+		nodenames = {"nether:fumarole"},
+		run_at_every_load = false,
+
+		action = function(pos) core.get_node_timer(pos):start(10) end
+	})
 end

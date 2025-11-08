@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2016 TenPlus1
+Copyright (c) 2025 TenPlus1
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 Textures by TenPlus1 (CC0) unless listed below...
+
+Textures by XSSeep (CC BY-SA 4.0):
+  mcl_mangrove_*.png
 
 Textures by Hugues Ross (CC BY-SA 4.0):
   ethereal_strawberry*.png

@@ -6,6 +6,7 @@ local stairs_mod = minetest.get_modpath("stairs")
 local stairs_redo = stairs_mod and stairs.mod and stairs.mod == "redo"
 local stairs_plus = minetest.global_exists("stairsplus")
 
+
 -- register stair function (stair mod will be auto-selected)
 
 local do_stair = function(description, name, node, groups, texture, sound)
@@ -140,7 +141,7 @@ do_stair(
 	default.node_sound_wood_defaults())
 
 do_stair(
-	"Bamboo", "bamboo_wood", "ethereal:bamboo_block",
+	"Bamboo short", "short_bamboo_wood", "ethereal:bamboo_block",
 	{snappy = 3, choppy = 2, oddly_breakable_by_hand = 1, flammable = 3},
 	{"ethereal_bamboo_floor.png"},
 	default.node_sound_wood_defaults())
